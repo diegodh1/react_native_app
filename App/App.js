@@ -1,0 +1,35 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ */
+
+import React from 'react';
+import Login from './src/components/login';
+import Home from './src/components/home';
+import Lista from './src/components/lista';
+import Frame from './src/components/frame';
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
+
+
+const AppSwitchNavigator = createSwitchNavigator({
+  inicio: { screen: Login },
+  home: {screen: Home},
+  lista: {screen: Lista},
+  frame: {screen: Frame},
+});
+const AppContainer = createAppContainer(AppSwitchNavigator);
+
+const App: () => React$Node = () => {
+  return (
+    <Provider store={store}>
+      <AppContainer />
+    </Provider>
+  );
+};
+
+export default App;
