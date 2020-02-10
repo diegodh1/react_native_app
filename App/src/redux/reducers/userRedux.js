@@ -28,11 +28,11 @@ const initialState = {
 function reducer(state = initialState, action) {
     switch (action.type) {
         case REQUEST_USER:
-            return { ...state, usuario: action.usuario };
+            return { ...state, usuario: action.usuario, cargando: true };
         case ERROR_USER:
             return { ...state, message: action.message };
         case RECEIVE_USER:
-            return { ...state, usuario: action.usuario, message: 'Ingreso Realizado' };
+            return { ...state, usuario: action.usuario, message: 'Ingreso Realizado', cargando: false };
         case REQUEST_PATHS:
             return { ...state, cargando: true };
         case RECEIVE_PATHS:

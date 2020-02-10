@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { requestSeccion } from '../redux/actions/actions';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
 
@@ -11,7 +11,7 @@ class Login extends Component {
         this.state = {
             user: '',
             pass: '',
-            showAlert: false,
+            cargandoLog: false,
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,14 +21,16 @@ class Login extends Component {
         this.props.requestSeccion(this.state.user, this.state.pass);
         event.preventDefault();
         this.AnimationRef.bounce();
+        this.setState({ cargandoLog: true });
         setTimeout(() => {
             this.setState({ user: '', pass: '' });
             const { message } = this.props;
-            if(message==='Ingreso Realizado'){
+            this.setState({ cargandoLog: false });
+            if (message === 'Ingreso Realizado') {
                 this.props.navigation.navigate('home');
             }
         }, 1000);
-        
+
 
     }
     componentDidUpdate(preProps, preState, actState) {
@@ -72,6 +74,9 @@ class Login extends Component {
                             onChangeText={(text) => this.setState({ pass: text })} />
                     </View>
                 </Animatable.View>
+                {
+                    this.state.cargandoLog ? <View style={styles.loading}><ActivityIndicator size="large" color="green" animating={true} /></View> : null
+                }
                 <Animatable.View animation="fadeInUp" iterationCount={1} direction="alternate" ref={ref => (this.AnimationRef = ref)}>
                     <View>
                         <TouchableOpacity
@@ -90,14 +95,7 @@ class Login extends Component {
 
 function UsuarioInvalido(props) {
     const mensaje = props.message;
-    if (mensaje === 'Ingreso Realizado') {
-        return (
-            <Text>
-                {mensaje}
-            </Text>
-        )
-    }
-    else if (mensaje !== 'Ingreso Realizado' && mensaje !== '') {
+    if (mensaje !== 'Ingreso Realizado' && mensaje !== '') {
         return (
             <Animatable.View animation="bounceInRight" iterationCount={1} direction="alternate">
                 <View style={styles.viewAlert}>
@@ -123,7 +121,7 @@ function UsuarioInvalido(props) {
 const mapStateToProps = (state) => {
     return {
         usuario: state.userRedux.usuario,
-        message: state.userRedux.message
+        message: state.userRedux.message,
     };
 }
 const mapDispatchToProps = {
@@ -136,20 +134,20 @@ const styles = StyleSheet.create({
     logo: {
         width: 150,
         height: 150,
-        marginBottom: 40,
-        marginTop: 22,
+        marginBottom: '10%',
+        marginTop: '7%',
     },
     icon: {
         color: '#505050',
-        marginLeft: 5
+        marginLeft: '5%'
     },
     iconButton: {
         color: 'white',
-        marginLeft: 5
+        marginLeft: '2%'
     },
     container: {
         flex: 1,
-        marginTop: 90,
+        marginTop: '20%',
         alignItems: 'center',
         backgroundColor: '#F7F7F7',
     },
@@ -161,7 +159,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderRadius: 8,
         textAlign: "center",
-        margin: 15,
+        margin: '2%',
     },
     input: {
 
@@ -176,7 +174,8 @@ const styles = StyleSheet.create({
         textAlign: "center",
         backgroundColor: '#6566FF',
         padding: 10,
-        margin: 15,
+        margin: '10%',
+        marginTop: '15%',
         height: 40,
         borderRadius: 50,
         height: 60,
@@ -187,10 +186,12 @@ const styles = StyleSheet.create({
         textAlign: "center",
         color: 'white',
         fontSize: 20,
+        marginLeft: '13%',
+
 
     },
     viewAlert: {
-        marginBottom: 20,
+        marginBottom: '20%',
         backgroundColor: 'red',
         width: '80%',
         textAlign: "center",
@@ -200,5 +201,14 @@ const styles = StyleSheet.create({
         textShadowColor: 'rgba(0, 0, 0, 0.70)',
         textShadowOffset: { width: -0.5, height: 1 },
         textShadowRadius: 3,
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 })

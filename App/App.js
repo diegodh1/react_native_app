@@ -15,7 +15,7 @@ import { Provider } from 'react-redux';
 import store from './src/redux/store';
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
-
+console.disableYellowBox = true;
 const AppSwitchNavigator = createSwitchNavigator({
   inicio: { screen: Login },
   home: {screen: Home},

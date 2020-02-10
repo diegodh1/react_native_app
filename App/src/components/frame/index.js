@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { requestPaths } from '../../redux/actions/actions';
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions,ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
 import ImageZoom from 'react-native-image-pan-zoom';
@@ -13,12 +13,27 @@ class Frame extends Component {
         this.state = {
             userId: '',
         };
+        this.backHome = this.backHome.bind(this);
+    }
+    backHome() {
+        this.AnimationRef.rubberBand();
+        this.props.navigation.navigate('Lista')
     }
     render() {
-        const { usuario, encoded64, extension } = this.props;
+        const { usuario, encoded64, extension , cargando} = this.props;
         return (
             <View>
-                <Icon name="view-sequential" size={40} onPress={() => this.props.navigation.openDrawer()} />
+                <View style={{ flexDirection: 'row' }}>
+                    <Icon name="view-sequential" size={40} onPress={() => this.props.navigation.openDrawer()} />
+                    <Animatable.View ref={ref => (this.AnimationRef = ref)}>
+                        <View style={{ paddingLeft: '80%' }}>
+                            <Icon name="reply" size={40} onPress={() => this.backHome()} />
+                        </View>
+                    </Animatable.View>
+                </View>
+                {
+                    cargando ? <View style={styles.loading}><ActivityIndicator size="large" color="black" animating={true} /></View> : null
+                }
                 <FrameItem ext={extension} encoded64={encoded64} />
             </View>
         );
@@ -28,8 +43,16 @@ class Frame extends Component {
 let FrameItem = props => {
     const { ext, encoded64 } = props;
     if (ext.toLocaleLowerCase() === 'pdf') {
-        let source = 'data:application/pdf;base64,'+encoded64;
-        return (<Text >Bienvenid@</Text>)
+        let source = { uri: "data:application/pdf;base64," + encoded64 };
+        return (
+            <View style={styles.container}>
+                <Pdf
+                    source={source}
+                    onLoadComplete={(numberOfPages, filePath) => {
+                    }}
+                    style={styles.pdf} />
+            </View>
+        )
     }
     else if (ext === '') {
         return (<Text >Bienvenid@</Text>)
@@ -37,17 +60,17 @@ let FrameItem = props => {
     else {
         let src = 'data:image/' + ext + ';base64,' + encoded64;
         return (
-            <View style={{margin:10}}>
-            <ImageZoom cropWidth={Dimensions.get('window').width}
-                cropHeight={Dimensions.get('window').height}
-                imageWidth={Dimensions.get('window').width}
-                imageHeight={Dimensions.get('window').height}
+            <View style={{ margin: 20 }}>
+                <ImageZoom cropWidth={Dimensions.get('window').width}
+                    cropHeight={Dimensions.get('window').height}
+                    imageWidth={Dimensions.get('window').width}
+                    imageHeight={Dimensions.get('window').height}
                 >
-                <Image
-                    style={{ width: '90%', height: '90%', borderWidth: 1, borderColor: 'red' }}
-                    source={{ uri: src }}
-                />
-            </ImageZoom>
+                    <Image
+                        style={{ width: '90%', height: '90%', borderWidth: 1, borderColor: 'black' }}
+                        source={{ uri: src }}
+                    />
+                </ImageZoom>
             </View>
         );
     }
@@ -58,16 +81,20 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     container: {
-        flex: 1,
-        justifyContent: 'flex-start',
         alignItems: 'center',
-        marginTop: 25,
+        margin:10,
     },
     pdf: {
-        flex:1,
-        width:Dimensions.get('window').width,
-        height:Dimensions.get('window').height,
-    }
+        width: '95%',
+        height: '95%',
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+      }
 })
 
 const mapStateToProps = (state) => {
@@ -75,6 +102,7 @@ const mapStateToProps = (state) => {
         usuario: state.userRedux.usuario,
         encoded64: state.userRedux.encoded64,
         extension: state.userRedux.extension,
+        cargando: state.userRedux.cargando,
     };
 }
 const mapDispatchToProps = {

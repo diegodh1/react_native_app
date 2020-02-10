@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { requestPaths, requestDirectoy, requestFile } from '../../redux/actions/actions';
-import { View, Text, Button, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
 
@@ -12,6 +12,7 @@ class Lista extends Component {
         this.state = {
             userId: '',
             actualDirectory: [],
+            show: true,
         };
         this.handleClick = this.handleClick.bind(this);
         this.backDirectory = this.backDirectory.bind(this);
@@ -39,7 +40,7 @@ class Lista extends Component {
     }
     backDirectory(event) {
         const { actualDirectory } = this.state;
-        this.AnimationRef.bounce();
+        this.AnimationRef.rubberBand();
         if (actualDirectory.length > 1) {
             actualDirectory.pop();
             const path = actualDirectory[actualDirectory.length - 1];
@@ -55,15 +56,20 @@ class Lista extends Component {
         }
     }
     render() {
-        const { usuario, paths, message } = this.props;
+        const { usuario, paths, message,cargando} = this.props;
         return (
             <View>
-                <Icon name="view-sequential" size={40} onPress={() => this.props.navigation.openDrawer()} />
-                <Animatable.View ref={ref => (this.AnimationRef = ref)}>
-                    <View style={{ alignItems: 'center' }}>
-                        <Icon style={{ color: '#62AC2F' }} name="arrow-left-bold-circle" size={60} onPress={(event) => this.backDirectory(event)} />
-                    </View>
-                </Animatable.View>
+                <View style={{ flexDirection: 'row' }}>
+                    <Icon name="view-sequential" size={40} onPress={() => this.props.navigation.openDrawer()} />
+                    <Animatable.View ref={ref => (this.AnimationRef = ref)}>
+                        <View style={{ paddingLeft: '80%' }}>
+                            <Icon name="reply" size={40} onPress={(event) => this.backDirectory(event)} />
+                        </View>
+                    </Animatable.View>
+                </View>
+                {
+                    cargando ? <View style={styles.loading}><ActivityIndicator size="large" color="black" animating={true} /></View> : null
+                }
                 <SafeAreaView >
                     <ScrollView >
                         <View>
@@ -83,6 +89,7 @@ class Lista extends Component {
                         </View>
                     </ScrollView>
                 </SafeAreaView>
+                
             </View>
         );
     }
@@ -136,8 +143,18 @@ const styles = StyleSheet.create({
     text: {
         color: 'black',
         fontSize: 15,
-        marginLeft: 10
-    }
+        marginLeft: 10,
+        borderBottomWidth:1
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center'
+      }
 })
 
 const mapStateToProps = (state) => {
@@ -146,6 +163,7 @@ const mapStateToProps = (state) => {
         message: state.userRedux.message,
         usuario: state.userRedux.usuario,
         directorys: state.userRedux.directorys,
+        cargando: state.userRedux.cargando,
     };
 }
 const mapDispatchToProps = {
