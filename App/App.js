@@ -11,6 +11,7 @@ import Login from './src/components/login';
 import Home from './src/components/home';
 import Lista from './src/components/lista';
 import Frame from './src/components/frame';
+import Gallery from './src/components/lista/rollcamera';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
@@ -21,6 +22,7 @@ const AppSwitchNavigator = createSwitchNavigator({
   home: {screen: Home},
   lista: {screen: Lista},
   frame: {screen: Frame},
+  Gallery: {screen: Gallery},
 });
 const AppContainer = createAppContainer(AppSwitchNavigator);
 

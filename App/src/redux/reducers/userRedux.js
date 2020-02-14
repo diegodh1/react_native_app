@@ -12,7 +12,9 @@ import {
     RECEIVE_FILE,
     ERROR_FILE,
     REQUEST,
-    SET_EXT
+    SET_EXT,
+    SUCCESS_UPLOAD,
+    ERROR_UPLOAD
 }
     from '../actions/actions';
 const initialState = {
@@ -23,6 +25,7 @@ const initialState = {
     encoded64: '',
     cargando: false,
     extension: '',
+    path: 'hola',
 };
 
 function reducer(state = initialState, action) {
@@ -40,9 +43,9 @@ function reducer(state = initialState, action) {
         case ERROR_PATHS:
             return { ...state, message: action.message };
         case REQUEST_DIRECTORY:
-            return { ...state };
+            return { ...state, path: action.path };
         case RECEIVE_DIRECTORY:
-            return { ...state, paths: action.paths, cargando: false };
+            return { ...state, paths: action.paths, path: action.path, cargando: false };
         case ERROR_DIRECTORY:
             return { ...state, message: action.message };
         case REQUEST_FILE:
@@ -55,6 +58,10 @@ function reducer(state = initialState, action) {
             return { ...state, cargando: true };
         case SET_EXT:
             return { ...state, extension: action.extension };
+        case SUCCESS_UPLOAD:
+            return { ...state, message: action.message, cargando: false };
+        case ERROR_UPLOAD:
+            return { ...state, message: action.message, cargando: false };
         default:
             return state;
     }

@@ -13,6 +13,9 @@ export const RECEIVE_FILE = 'RECEIVE_FILE';
 export const ERROR_FILE = 'ERROR_FILE';
 export const REQUEST = 'REQUEST';
 export const SET_EXT = 'SET_EXT';
+export const REQUEST_UPLOAD = 'REQUEST_UPLOAD';
+export const SUCCESS_UPLOAD = 'SUCCESS_UPLOAD';
+export const ERROR_UPLOAD = 'ERROR_UPLOAD';
 //******************LOGIN*******************
 export const successSeccion = (user, id) => {
     return {
@@ -64,10 +67,11 @@ export const requestDirectoy = path => {
         path,
     }
 }
-export const successDirectoy = paths => {
+export const successDirectoy = (paths,path)=> {
     return {
         type: RECEIVE_DIRECTORY,
         paths,
+        path,
     }
 }
 export const errorDirectoy = () => {
@@ -77,7 +81,7 @@ export const errorDirectoy = () => {
     }
 }
 //**************FILE TO 64 BITS*************/
-export const requestFile = (path,extension) => {
+export const requestFile = (path, extension) => {
     return {
         type: REQUEST_FILE,
         path,
@@ -106,5 +110,26 @@ export const setext = extension => {
     return {
         type: SET_EXT,
         extension,
+    }
+}
+export const successUpload = message => {
+    return {
+        type: SUCCESS_UPLOAD,
+        message,
+    }
+}
+
+export const errorUpload = message => {
+    return {
+        type: ERROR_UPLOAD,
+        message: 'Error al subir el archivo',
+    }
+}
+export const requestUpload = (image, path, name) => {
+    return {
+        type: REQUEST_UPLOAD,
+        image,
+        path,
+        name
     }
 }

@@ -1,4 +1,4 @@
-import { successSeccion, errorSeccion, successPaths, errorPaths, errorDirectoy, successDirectoy, errorFile, successFile, request,setext } from './actions/actions';
+import { successSeccion, errorSeccion, successPaths, errorPaths, errorDirectoy, successDirectoy, errorFile, successFile, request, setext,successUpload,errorUpload } from './actions/actions';
 
 const middleware = store => next => action => {
     switch (action.type) {
@@ -28,8 +28,9 @@ const middleware = store => next => action => {
                 .catch(error => store.dispatch(errorPaths()));
             break;
         case "REQUEST_DIRECTORY":
-            store.dispatch(request());
+            
             const { path } = action;
+            store.dispatch(request());
             fetch('http://192.168.0.21:4000/getFiles', {
                 method: 'POST',
                 body: JSON.stringify({ path }), // data can be `string` or {object}!
@@ -38,7 +39,7 @@ const middleware = store => next => action => {
                 }
             }).then(res => res.json())
                 .then(response => {
-                    response.message !== 'status 200, ok' ? store.dispatch(errorDirectoy()) : store.dispatch(successDirectoy(response.directory));
+                    response.message !== 'status 200, ok' ? store.dispatch(errorDirectoy()) : store.dispatch(successDirectoy(response.directory,path));
                 })
                 .catch(error => store.dispatch(errorDirectoy()));
             break;
@@ -56,6 +57,20 @@ const middleware = store => next => action => {
                     store.dispatch(successFile(response))
                 })
                 .catch(error => store.dispatch(errorFile()));
+            break;
+        case "REQUEST_UPLOAD":
+            store.dispatch(request());
+            fetch('http://192.168.0.21:4000/uploadFile', {
+                method: 'POST',
+                body: JSON.stringify({ image: action.image, path: action.path, name: action.name }), // data can be `string` or {object}!
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => res.text())
+                .then(response => {
+                    response==='Archivo Almacenado'?store.dispatch(successUpload(response)):store.dispatch(errorUpload(response))
+                })
+                .catch(error => store.dispatch(errorUpload('error')));
             break;
         default:
             next(action);

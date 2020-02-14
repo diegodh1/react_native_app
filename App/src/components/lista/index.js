@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { requestPaths, requestDirectoy, requestFile } from '../../redux/actions/actions';
-import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, Text, Button, Dimensions, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
+
 
 
 class Lista extends Component {
@@ -16,17 +17,23 @@ class Lista extends Component {
         };
         this.handleClick = this.handleClick.bind(this);
         this.backDirectory = this.backDirectory.bind(this);
+        this.subirImagen = this.subirImagen.bind(this);
     }
     componentDidMount() {
         this.props.requestPaths();
     }
-    handleClick(path, event, ext) {
-        if (ext && ext !== 'none') {
+    handleClick(path, event, ext, refresh) {
+        if (ext && ext !== 'none' && refresh == false) {
             this.props.requestFile(path, ext);
             event.preventDefault();
             setTimeout(() => {
                 this.props.navigation.navigate('Frame')
             }, 500);
+        }
+        else if (refresh == true) {
+            const { actualDirectory } = this.state;
+            let size = actualDirectory.length;
+            this.props.requestDirectoy(actualDirectory[size - 1]);
         }
         else {
             const { actualDirectory } = this.state;
@@ -40,7 +47,6 @@ class Lista extends Component {
     }
     backDirectory(event) {
         const { actualDirectory } = this.state;
-        this.AnimationRef.rubberBand();
         if (actualDirectory.length > 1) {
             actualDirectory.pop();
             const path = actualDirectory[actualDirectory.length - 1];
@@ -55,14 +61,22 @@ class Lista extends Component {
             this.props.requestPaths();
         }
     }
+    subirImagen(event){
+        this.props.navigation.navigate('Gallery')
+    }
     render() {
-        const { usuario, paths, message,cargando} = this.props;
+        const { usuario, paths, message, cargando } = this.props;
         return (
             <View>
-                <View style={{ flexDirection: 'row' }}>
-                    <Icon name="view-sequential" size={40} onPress={() => this.props.navigation.openDrawer()} />
+                <View style={{ flexDirection: 'row', marginBottom:'4%' }}>
+                    <Icon name="upload" size={40} onPress={(event) => this.subirImagen(event)} />
                     <Animatable.View ref={ref => (this.AnimationRef = ref)}>
-                        <View style={{ paddingLeft: '80%' }}>
+                        <View style={{ paddingLeft: '54%' }}>
+                            <Icon name="restart" size={40} onPress={(event) => this.handleClick('', '', '', true)} />
+                        </View>
+                    </Animatable.View>
+                    <Animatable.View ref={ref => (this.AnimationRef = ref)}>
+                        <View style={{ paddingLeft: '30%' }}>
                             <Icon name="reply" size={40} onPress={(event) => this.backDirectory(event)} />
                         </View>
                     </Animatable.View>
@@ -78,7 +92,7 @@ class Lista extends Component {
                                     <TouchableOpacity
                                         key={path.nombre}
                                         style={styles.container}
-                                        onPress={(event) => this.handleClick(path.ruta, event, path.extension)}>
+                                        onPress={(event) => this.handleClick(path.ruta, event, path.extension, false)}>
                                         < GetIcon ext={path.extension} />
                                         <Text style={styles.text}>
                                             {path.nombre}
@@ -86,10 +100,12 @@ class Lista extends Component {
                                     </TouchableOpacity>
                                 ))
                             }
+                            
                         </View>
+                            
                     </ScrollView>
                 </SafeAreaView>
-                
+
             </View>
         );
     }
@@ -144,7 +160,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 15,
         marginLeft: 10,
-        borderBottomWidth:1
+        borderBottomWidth: 1
     },
     loading: {
         position: 'absolute',
@@ -154,7 +170,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center'
-      }
+    }
 })
 
 const mapStateToProps = (state) => {
