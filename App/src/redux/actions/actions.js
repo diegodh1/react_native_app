@@ -24,6 +24,9 @@ export const ERROR_OT = 'ERROR_OT';
 export const REQUEST_REMISION = 'REQUEST_REMISION';
 export const RECEIVE_REMISION = 'RECEIVE_REMISION';
 export const ERROR_REMISION = 'ERROR_REMISION';
+export const REQUEST_COMPONENTES = 'REQUEST_COMPONENTES';
+export const RECEIVE_COMPONENTES = 'RECEIVE_COMPONENTES';
+export const ERROR_COMPONENTES = 'ERROR_COMPONENTES';
 //******************LOGIN*******************
 export const successSeccion = (user, id) => {
     return {
@@ -173,9 +176,29 @@ export const receive_remision = items_remision => {
         items_remision,
     }
 }
-export const error_remision = (err) => {
+export const error_remision = () => {
     return {
         type: ERROR_REMISION,
-        items_remision: [['','','','']],
+        items_remision: [],
+    }
+}
+export const request_componentes = (ot,item,nro) => {
+    return {
+        type: REQUEST_COMPONENTES,
+        ot,
+        item,
+        nro,
+    }
+}
+export const receive_componentes = item_componentes => {
+    return {
+        type: RECEIVE_COMPONENTES,
+        item_componentes,
+    }
+}
+export const error_componentes = () => {
+    return {
+        type: ERROR_COMPONENTES,
+        item_componentes: [],
     }
 }

@@ -14,7 +14,9 @@ import {
     receive_ot_remision,
     error_ot_remision,
     receive_remision,
-    error_remision
+    error_remision,
+    receive_componentes,
+    error_componentes,
 } from './actions/actions';
 import axios from 'axios';
 
@@ -112,9 +114,23 @@ const middleware = store => next => action => {
                 }
             }).then(res => res.json())
                 .then(response => {
-                    store.dispatch(receive_remision(response.data, action.ot))
+                    store.dispatch(receive_remision(response.data))
                 })
                 .catch(error => store.dispatch(error_remision()));
+
+            break;
+        case "REQUEST_COMPONENTES":
+            fetch('http://192.168.0.21:4000/getComponentes', {
+                method: 'POST',
+                body: JSON.stringify({ ot: action.ot, item: action.item, nro: action.nro }), // data can be `string` or {object}!
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => res.json())
+                .then(response => {
+                    store.dispatch(receive_componentes(response.data))
+                })
+                .catch(error => store.dispatch(error_componentes()));
 
             break;
         default:

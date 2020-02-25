@@ -21,6 +21,9 @@ import {
     REQUEST_REMISION,
     RECEIVE_REMISION,
     ERROR_REMISION,
+    REQUEST_COMPONENTES,
+    RECEIVE_COMPONENTES,
+    ERROR_COMPONENTES,
 }
     from '../actions/actions';
 const initialState = {
@@ -34,8 +37,9 @@ const initialState = {
     path: 'hola',
     ot: '',
     header_remision: {},
-    items_remision: [['', '', '', '']],
+    items_remision: [],
     id_remision: '',
+    item_componentes: [],
 };
 
 function reducer(state = initialState, action) {
@@ -84,6 +88,12 @@ function reducer(state = initialState, action) {
             return { ...state, items_remision: action.items_remision };
         case ERROR_REMISION:
             return { ...state, items_remision: action.items_remision };
+        case REQUEST_COMPONENTES:
+            return { ...state };
+        case RECEIVE_COMPONENTES:
+            return { ...state, item_componentes: action.item_componentes };
+        case ERROR_COMPONENTES:
+            return { ...state, item_componentes: action.item_componentes };
         default:
             return state;
     }
