@@ -1,3 +1,5 @@
+import { Alert } from "react-native";
+
 export const VALIDARUSUARIO = 'validateUser';
 export const REQUEST_USER = 'REQUEST_USER';
 export const ERROR_USER = 'ERROR_USER';
@@ -16,6 +18,12 @@ export const SET_EXT = 'SET_EXT';
 export const REQUEST_UPLOAD = 'REQUEST_UPLOAD';
 export const SUCCESS_UPLOAD = 'SUCCESS_UPLOAD';
 export const ERROR_UPLOAD = 'ERROR_UPLOAD';
+export const SEARCH_OT = 'SEARCH_OT';
+export const RECEIVE_OT = 'RECEIVE_OT';
+export const ERROR_OT = 'ERROR_OT';
+export const REQUEST_REMISION = 'REQUEST_REMISION';
+export const RECEIVE_REMISION = 'RECEIVE_REMISION';
+export const ERROR_REMISION = 'ERROR_REMISION';
 //******************LOGIN*******************
 export const successSeccion = (user, id) => {
     return {
@@ -67,7 +75,7 @@ export const requestDirectoy = path => {
         path,
     }
 }
-export const successDirectoy = (paths,path)=> {
+export const successDirectoy = (paths, path) => {
     return {
         type: RECEIVE_DIRECTORY,
         paths,
@@ -131,5 +139,43 @@ export const requestUpload = (image, path, name) => {
         image,
         path,
         name
+    }
+}
+export const search_ot_remision = ot => {
+    return {
+        type: SEARCH_OT,
+        ot,
+    }
+}
+export const receive_ot_remision = (header_remision, ot) => {
+    return {
+        type: RECEIVE_OT,
+        header_remision,
+        ot,
+    }
+}
+export const error_ot_remision = () => {
+    return {
+        type: RECEIVE_OT,
+        header_remision: {},
+    }
+}
+export const request_remision = (ot,id_user) => {
+    return {
+        type: REQUEST_REMISION,
+        ot,
+        id_user,
+    }
+}
+export const receive_remision = items_remision => {
+    return {
+        type: RECEIVE_REMISION,
+        items_remision,
+    }
+}
+export const error_remision = (err) => {
+    return {
+        type: ERROR_REMISION,
+        items_remision: [['','','','']],
     }
 }

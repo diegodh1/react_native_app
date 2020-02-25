@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Lista from '../lista';
 import Frame from '../frame';
 import Gallery from '../lista/rollcamera';
+import Remision from '../remision';
 
 function HomeScreen({ navigation }) {
   return (
@@ -34,6 +35,7 @@ function Home() {
         <Drawer.Screen name="Frame" component={Frame} />
         <Drawer.Screen name="Lista" component={Lista} />
         <Drawer.Screen name="Gallery" component={Gallery} />
+        <Drawer.Screen name="Remision" component={Remision} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

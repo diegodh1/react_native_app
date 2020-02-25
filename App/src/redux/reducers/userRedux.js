@@ -14,7 +14,13 @@ import {
     REQUEST,
     SET_EXT,
     SUCCESS_UPLOAD,
-    ERROR_UPLOAD
+    ERROR_UPLOAD,
+    SEARCH_OT,
+    RECEIVE_OT,
+    ERROR_OT,
+    REQUEST_REMISION,
+    RECEIVE_REMISION,
+    ERROR_REMISION,
 }
     from '../actions/actions';
 const initialState = {
@@ -26,6 +32,10 @@ const initialState = {
     cargando: false,
     extension: '',
     path: 'hola',
+    ot: '',
+    header_remision: {},
+    items_remision: [['', '', '', '']],
+    id_remision: '',
 };
 
 function reducer(state = initialState, action) {
@@ -62,6 +72,18 @@ function reducer(state = initialState, action) {
             return { ...state, message: action.message, cargando: false };
         case ERROR_UPLOAD:
             return { ...state, message: action.message, cargando: false };
+        case SEARCH_OT:
+            return { ...state, ot: action.ot };
+        case RECEIVE_OT:
+            return { ...state, header_remision: action.header_remision, ot: action.ot };
+        case ERROR_OT:
+            return { ...state, header_remision: action.header_remision };
+        case REQUEST_REMISION:
+            return { ...state };
+        case RECEIVE_REMISION:
+            return { ...state, items_remision: action.items_remision };
+        case ERROR_REMISION:
+            return { ...state, items_remision: action.items_remision };
         default:
             return state;
     }
