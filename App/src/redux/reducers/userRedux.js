@@ -24,6 +24,9 @@ import {
     REQUEST_COMPONENTES,
     RECEIVE_COMPONENTES,
     ERROR_COMPONENTES,
+    REQUEST_SAVE_CPTE,
+    RECEIVE_SAVE_CPTE,
+    ERROR_SAVE_CPTE
 }
     from '../actions/actions';
 const initialState = {
@@ -93,6 +96,12 @@ function reducer(state = initialState, action) {
         case RECEIVE_COMPONENTES:
             return { ...state, item_componentes: action.item_componentes };
         case ERROR_COMPONENTES:
+            return { ...state, item_componentes: action.item_componentes };
+        case REQUEST_SAVE_CPTE:
+            return { ...state };
+        case RECEIVE_SAVE_CPTE:
+            return { ...state, item_componentes: action.item_componentes };
+        case ERROR_SAVE_CPTE:
             return { ...state, item_componentes: action.item_componentes };
         default:
             return state;

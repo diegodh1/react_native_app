@@ -6,7 +6,7 @@ import { Card, Button, List, ListItem } from 'react-native-elements'
 import Search from '../search'
 import { color } from 'react-native-reanimated';
 import { DataTable } from 'react-native-paper';
-import { request_remision, request_componentes } from '../../redux/actions/actions';
+import { request_remision, request_componentes,request_save_cpte } from '../../redux/actions/actions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from "react-native-modal";
 
@@ -17,8 +17,6 @@ class Remision extends Component {
         super(props);
         this.state = {
             user: '',
-            tableHead: ['O.T', 'Id Item', 'Item', 'Nro'],
-            widthArr: [40, 60, 80, 100],
             tableData: [],
             isModalVisible: false,
             checked: 0,
@@ -26,6 +24,7 @@ class Remision extends Component {
         this.generarRemision = this.generarRemision.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.toggleModalClose = this.toggleModalClose.bind(this);
+        this.saveComponente = this.saveComponente.bind(this);
     }
     toggleModal(ot, item, nro) {
         this.props.request_componentes(ot, item, nro);
@@ -37,6 +36,12 @@ class Remision extends Component {
     generarRemision() {
         const { ot, usuario } = this.props;
         this.props.request_remision(ot, usuario.id);
+    }
+    saveComponente(id,item,nro,ot,requerida) {
+        const id_sub_item = ""+ot+"-"+item+"-"+nro;
+        requerida = !requerida
+        const { usuario } = this.props;
+        this.props.request_save_cpte(id_sub_item,id,usuario.id,requerida,ot,item,nro);
     }
     render() {
         const { header_remision, items_remision, item_componentes } = this.props;
@@ -79,7 +84,7 @@ class Remision extends Component {
                                             <DataTable.Cell>{row.nro}</DataTable.Cell>
                                             <DataTable.Cell>{row.ot}</DataTable.Cell>
                                             <DataTable.Cell >{row.id}</DataTable.Cell>
-                                            <DataTable.Cell onPress={(event) => this.toggleModal(row.ot, row.item, row.nro)}>  <Icon name='border-color' size={25} color='green' /></DataTable.Cell>
+                                            <DataTable.Cell onPress={(event) => this.toggleModal(row.ot, row.item, row.nro)}>  <Icon name='border-color' size={30} color='green' /></DataTable.Cell>
                                         </DataTable.Row>
                                     ))
                                 }
@@ -105,8 +110,8 @@ class Remision extends Component {
                                                                 uncheckedIcon: 'clear',
                                                                 checkedColor: 'green',
                                                                 uncheckedColor: 'red',
-                                                                onPress: () => {alert('hola')},
-                                                                checked: this.state.checked,
+                                                                onPress: () => {this.saveComponente(l.id,l.item,l.nro,l.ot,l.requerida)},
+                                                                checked: l.requerida,
                                                             }}
                                                             key={l.id}
                                                             title={l.descripcion}
@@ -153,5 +158,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     request_remision,
     request_componentes,
+    request_save_cpte,
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Remision);

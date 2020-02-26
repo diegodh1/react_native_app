@@ -27,6 +27,9 @@ export const ERROR_REMISION = 'ERROR_REMISION';
 export const REQUEST_COMPONENTES = 'REQUEST_COMPONENTES';
 export const RECEIVE_COMPONENTES = 'RECEIVE_COMPONENTES';
 export const ERROR_COMPONENTES = 'ERROR_COMPONENTES';
+export const REQUEST_SAVE_CPTE = 'REQUEST_SAVE_CPTE';
+export const RECEIVE_SAVE_CPTE = 'RECEIVE_SAVE_CPTE';
+export const ERROR_SAVE_CPTE = 'ERROR_SAVE_CPTE';
 //******************LOGIN*******************
 export const successSeccion = (user, id) => {
     return {
@@ -199,6 +202,30 @@ export const receive_componentes = item_componentes => {
 export const error_componentes = () => {
     return {
         type: ERROR_COMPONENTES,
+        item_componentes: [],
+    }
+}
+export const request_save_cpte= (id_sub_item,id_componente,id_usuario,requerida,ot,item,nro) => {
+    return {
+        type: REQUEST_SAVE_CPTE,
+        id_sub_item,
+        id_componente,
+        id_usuario,
+        requerida,
+        ot,
+        item,
+        nro,
+    }
+}
+export const receive_save_cpte = item_componentes => {
+    return {
+        type: RECEIVE_SAVE_CPTE,
+        item_componentes,
+    }
+}
+export const error_save_cpte= () => {
+    return {
+        type: ERROR_SAVE_CPTE,
         item_componentes: [],
     }
 }

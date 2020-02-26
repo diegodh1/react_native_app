@@ -17,8 +17,11 @@ import {
     error_remision,
     receive_componentes,
     error_componentes,
+    receive_save_cpte,
+    error_save_cpte,
 } from './actions/actions';
 import axios from 'axios';
+import { ActionSheetIOS } from 'react-native';
 
 const middleware = store => next => action => {
     switch (action.type) {
@@ -131,7 +134,19 @@ const middleware = store => next => action => {
                     store.dispatch(receive_componentes(response.data))
                 })
                 .catch(error => store.dispatch(error_componentes()));
-
+            break;
+        case "REQUEST_SAVE_CPTE":
+            fetch('http://192.168.0.21:4000/saveComponente', {
+                method: 'POST',
+                body: JSON.stringify({ id_sub_item: action.id_sub_item, id_componente: action.id_componente, id_usuario: action.id_usuario, requerida: action.requerida, ot: action.ot, item: action.item, nro: action.nro }), // data can be `string` or {object}!
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => res.json())
+                .then(response => {
+                    store.dispatch(receive_save_cpte(response.data))
+                })
+                .catch(error => store.dispatch(error_save_cpte()));
             break;
         default:
             next(action);
