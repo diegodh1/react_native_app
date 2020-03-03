@@ -5,6 +5,10 @@ import ImagePicker from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
 import { requestUpload } from '../../redux/actions/actions';
+import {
+    PacmanIndicator,
+} from 'react-native-indicators';
+import { Header } from 'react-native-elements';
 class Gallery extends React.Component {
     constructor(props) {
         super(props);
@@ -32,7 +36,6 @@ class Gallery extends React.Component {
 
     }
     backHome() {
-        this.AnimationRef.rubberBand();
         this.props.navigation.navigate('Lista')
     }
     chooseFile = () => {
@@ -66,42 +69,43 @@ class Gallery extends React.Component {
     render() {
         return (
             <View>
-                <View style={{ flexDirection: 'row', marginBottom:'8%' }}>
-                    <Icon name="view-sequential" size={40} onPress={() => this.props.navigation.openDrawer()} />
-                    <Animatable.View ref={ref => (this.AnimationRef = ref)}>
-                        <View style={{ paddingLeft: '80%' }}>
-                            <Icon name="reply" size={40} onPress={() => this.backHome()} />
-                        </View>
-                    </Animatable.View>
-                </View>
+                <Header
+                    containerStyle={{
+                        backgroundColor: '#6566FF',
+                        justifyContent: 'space-around'
+                    }}
+                    leftComponent={<Icon  color="white" name="view-sequential" size={40} onPress={() => this.props.navigation.openDrawer()} />}
+                    rightComponent={<Icon color="white" name="reply" size={40} onPress={() => this.backHome()} />}
+                />
                 <View style={styles.container}>
-
-                    <Image
-                        source={{
-                            uri: 'data:image/jpeg;base64,' + this.state.filePath.data,
-                        }}
-                        style={{ width: 350, height: 350 }}
-                    />
                     {
-                        this.state.cargandoLog ? <View style={styles.loading}><ActivityIndicator size="large" color="green" animating={true} /></View> : null
+                        this.state.cargandoLog ? <View><PacmanIndicator color="green" /></View> :
+                            <View>
+                                <Image
+                                    source={{
+                                        uri: 'data:image/jpeg;base64,' + this.state.filePath.data,
+                                    }}
+                                    style={{ width: 350, height: 350 }}
+                                />
+
+                                <Text style={{ alignItems: 'center', width: '60%', fontSize: 10 }}>
+                                    Nombre: {this.state.filePath.fileName}
+
+                                </Text>
+                                <Text style={{ alignItems: 'center', width: '60%', fontSize: 10 }}>
+                                    Tamaño: {this.state.filePath.fileSize} bytes
+                                    </Text>
+                                <View style={styles.button}>
+                                    <View>
+                                        <Button title="Seleccionar" onPress={this.chooseFile} />
+
+                                    </View>
+                                    <View style={{ marginLeft: '3%' }}>
+                                        <Button title="Subir" onPress={this.cargarImagen} />
+                                    </View>
+                                </View>
+                            </View>
                     }
-                    <Text style={{ alignItems: 'center', width: '60%', fontSize: 10 }}>
-                        Nombre: {this.state.filePath.fileName}
-
-                    </Text>
-                    <Text style={{ alignItems: 'center', width: '60%', fontSize: 10 }}>
-                        Tamaño: {this.state.filePath.fileSize} bytes
-                    </Text>
-                    <View style={styles.button}>
-                        <View>
-                            <Button title="Seleccionar" onPress={this.chooseFile} />
-
-                        </View>
-                        <View style={{ marginLeft: '3%' }}>
-                            <Button title="Subir" onPress={this.cargarImagen} />
-                        </View>
-                    </View>
-
                 </View>
             </View>
         );

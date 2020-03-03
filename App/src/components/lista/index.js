@@ -4,8 +4,10 @@ import { requestPaths, requestDirectoy, requestFile } from '../../redux/actions/
 import { View, Text, Button, Dimensions, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
-
-
+import {
+    PacmanIndicator,
+} from 'react-native-indicators';
+import { Header } from 'react-native-elements';
 
 class Lista extends Component {
     constructor(props) {
@@ -61,50 +63,49 @@ class Lista extends Component {
             this.props.requestPaths();
         }
     }
-    subirImagen(event){
+    subirImagen(event) {
         this.props.navigation.navigate('Gallery')
     }
     render() {
         const { usuario, paths, message, cargando } = this.props;
         return (
             <View>
-                <View style={{ flexDirection: 'row', marginBottom:'4%' }}>
-                    <Icon name="upload" size={40} onPress={(event) => this.subirImagen(event)} />
-                    <Animatable.View ref={ref => (this.AnimationRef = ref)}>
-                        <View style={{ paddingLeft: '54%' }}>
-                            <Icon name="restart" size={40} onPress={(event) => this.handleClick('', '', '', true)} />
-                        </View>
-                    </Animatable.View>
-                    <Animatable.View ref={ref => (this.AnimationRef = ref)}>
-                        <View style={{ paddingLeft: '30%' }}>
-                            <Icon name="reply" size={40} onPress={(event) => this.backDirectory(event)} />
-                        </View>
-                    </Animatable.View>
-                </View>
+
                 {
-                    cargando ? <View style={styles.loading}><ActivityIndicator size="large" color="black" animating={true} /></View> : null
-                }
-                <SafeAreaView >
-                    <ScrollView >
+                    cargando ? <View style={styles.loading}><PacmanIndicator color="green" /></View> :
                         <View>
-                            {
-                                paths.map((path) => (
-                                    <TouchableOpacity
-                                        key={path.nombre}
-                                        style={styles.container}
-                                        onPress={(event) => this.handleClick(path.ruta, event, path.extension, false)}>
-                                        < GetIcon ext={path.extension} />
-                                        <Text style={styles.text}>
-                                            {path.nombre}
-                                        </Text>
-                                    </TouchableOpacity>
-                                ))
-                            }
-                            
+                            <Header
+                                containerStyle={{
+                                    backgroundColor: '#6566FF',
+                                    justifyContent: 'space-around'
+                                }}
+                                leftComponent={<Icon color='white' name="upload" size={40} onPress={(event) => this.subirImagen(event)} />}
+                                centerComponent={<Icon color='white' name="restart" size={40} onPress={(event) => this.handleClick('', '', '', true)} />}
+                                rightComponent={<Icon color='white' name="reply" size={40} onPress={(event) => this.backDirectory(event)} />}
+                            />
+                            <SafeAreaView >
+                                <ScrollView >
+                                    <View>
+                                        {
+                                            paths.map((path) => (
+                                                <TouchableOpacity
+                                                    key={path.nombre}
+                                                    style={styles.container}
+                                                    onPress={(event) => this.handleClick(path.ruta, event, path.extension, false)}>
+                                                    < GetIcon ext={path.extension} />
+                                                    <Text style={styles.text}>
+                                                        {path.nombre}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            ))
+                                        }
+
+                                    </View>
+
+                                </ScrollView>
+                            </SafeAreaView>
                         </View>
-                            
-                    </ScrollView>
-                </SafeAreaView>
+                }
 
             </View>
         );
@@ -166,10 +167,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
+        marginTop: '50%',
         top: 0,
         bottom: 0,
-        alignItems: 'center',
-        justifyContent: 'center'
     }
 })
 

@@ -21,12 +21,8 @@ import {
     REQUEST_REMISION,
     RECEIVE_REMISION,
     ERROR_REMISION,
-    REQUEST_COMPONENTES,
-    RECEIVE_COMPONENTES,
-    ERROR_COMPONENTES,
-    REQUEST_SAVE_CPTE,
-    RECEIVE_SAVE_CPTE,
-    ERROR_SAVE_CPTE
+    SEARCH_REMISION,
+    RECEIVE,
 }
     from '../actions/actions';
 const initialState = {
@@ -39,10 +35,11 @@ const initialState = {
     extension: '',
     path: 'hola',
     ot: '',
-    header_remision: {},
+    header_remision: { remisiones: [] },
     items_remision: [],
     id_remision: '',
     item_componentes: [],
+
 };
 
 function reducer(state = initialState, action) {
@@ -73,6 +70,8 @@ function reducer(state = initialState, action) {
             return { ...state, message: action.message };
         case REQUEST:
             return { ...state, cargando: true };
+        case RECEIVE:
+            return { ...state, cargando: false };
         case SET_EXT:
             return { ...state, extension: action.extension };
         case SUCCESS_UPLOAD:
@@ -82,27 +81,17 @@ function reducer(state = initialState, action) {
         case SEARCH_OT:
             return { ...state, ot: action.ot };
         case RECEIVE_OT:
-            return { ...state, header_remision: action.header_remision, ot: action.ot };
+            return { ...state, header_remision: action.header_remision, ot: action.ot, items_remision: [] };
         case ERROR_OT:
             return { ...state, header_remision: action.header_remision };
         case REQUEST_REMISION:
             return { ...state };
         case RECEIVE_REMISION:
-            return { ...state, items_remision: action.items_remision };
+            return { ...state, items_remision: action.items_remision, cargando: false, id_remision: action.id_remision };
         case ERROR_REMISION:
-            return { ...state, items_remision: action.items_remision };
-        case REQUEST_COMPONENTES:
+            return { ...state, items_remision: action.items_remision, cargando: false };
+        case SEARCH_REMISION:
             return { ...state };
-        case RECEIVE_COMPONENTES:
-            return { ...state, item_componentes: action.item_componentes };
-        case ERROR_COMPONENTES:
-            return { ...state, item_componentes: action.item_componentes };
-        case REQUEST_SAVE_CPTE:
-            return { ...state };
-        case RECEIVE_SAVE_CPTE:
-            return { ...state, item_componentes: action.item_componentes };
-        case ERROR_SAVE_CPTE:
-            return { ...state, item_componentes: action.item_componentes };
         default:
             return state;
     }

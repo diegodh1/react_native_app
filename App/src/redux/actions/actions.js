@@ -1,4 +1,4 @@
-import { Alert } from "react-native";
+import { Alert, ActionSheetIOS } from "react-native";
 
 export const VALIDARUSUARIO = 'validateUser';
 export const REQUEST_USER = 'REQUEST_USER';
@@ -24,12 +24,8 @@ export const ERROR_OT = 'ERROR_OT';
 export const REQUEST_REMISION = 'REQUEST_REMISION';
 export const RECEIVE_REMISION = 'RECEIVE_REMISION';
 export const ERROR_REMISION = 'ERROR_REMISION';
-export const REQUEST_COMPONENTES = 'REQUEST_COMPONENTES';
-export const RECEIVE_COMPONENTES = 'RECEIVE_COMPONENTES';
-export const ERROR_COMPONENTES = 'ERROR_COMPONENTES';
-export const REQUEST_SAVE_CPTE = 'REQUEST_SAVE_CPTE';
-export const RECEIVE_SAVE_CPTE = 'RECEIVE_SAVE_CPTE';
-export const ERROR_SAVE_CPTE = 'ERROR_SAVE_CPTE';
+export const SEARCH_REMISION = 'SEARCH_REMISION';
+export const RECEIVE = 'RECEIVE';
 //******************LOGIN*******************
 export const successSeccion = (user, id) => {
     return {
@@ -120,6 +116,11 @@ export const request = () => {
         type: REQUEST,
     }
 }
+export const receive = () => {
+    return {
+        type: RECEIVE,
+    }
+}
 export const setext = extension => {
     return {
         type: SET_EXT,
@@ -173,10 +174,11 @@ export const request_remision = (ot,id_user) => {
         id_user,
     }
 }
-export const receive_remision = items_remision => {
+export const receive_remision = (items_remision,id_remision) => {
     return {
         type: RECEIVE_REMISION,
         items_remision,
+        id_remision,
     }
 }
 export const error_remision = () => {
@@ -185,47 +187,9 @@ export const error_remision = () => {
         items_remision: [],
     }
 }
-export const request_componentes = (ot,item,nro) => {
+export const search_remision = id_rem => {
     return {
-        type: REQUEST_COMPONENTES,
-        ot,
-        item,
-        nro,
-    }
-}
-export const receive_componentes = item_componentes => {
-    return {
-        type: RECEIVE_COMPONENTES,
-        item_componentes,
-    }
-}
-export const error_componentes = () => {
-    return {
-        type: ERROR_COMPONENTES,
-        item_componentes: [],
-    }
-}
-export const request_save_cpte= (id_sub_item,id_componente,id_usuario,requerida,ot,item,nro) => {
-    return {
-        type: REQUEST_SAVE_CPTE,
-        id_sub_item,
-        id_componente,
-        id_usuario,
-        requerida,
-        ot,
-        item,
-        nro,
-    }
-}
-export const receive_save_cpte = item_componentes => {
-    return {
-        type: RECEIVE_SAVE_CPTE,
-        item_componentes,
-    }
-}
-export const error_save_cpte= () => {
-    return {
-        type: ERROR_SAVE_CPTE,
-        item_componentes: [],
+        type: SEARCH_REMISION,
+        id_rem,
     }
 }

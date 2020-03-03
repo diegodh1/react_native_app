@@ -109,6 +109,7 @@ const middleware = store => next => action => {
                 .catch(error => store.dispatch(error_ot_remision()));
             break;
         case "REQUEST_REMISION":
+            store.dispatch(request());
             fetch('http://192.168.0.21:4000/getItems', {
                 method: 'POST',
                 body: JSON.stringify({ ot: action.ot, user: action.id_user }), // data can be `string` or {object}!
@@ -117,36 +118,23 @@ const middleware = store => next => action => {
                 }
             }).then(res => res.json())
                 .then(response => {
-                    store.dispatch(receive_remision(response.data))
+                    store.dispatch(receive_remision(response.data, response.remision_id))
                 })
                 .catch(error => store.dispatch(error_remision()));
-
             break;
-        case "REQUEST_COMPONENTES":
-            fetch('http://192.168.0.21:4000/getComponentes', {
+        case "SEARCH_REMISION":
+            store.dispatch(request());
+            fetch('http://192.168.0.21:4000/get_remision', {
                 method: 'POST',
-                body: JSON.stringify({ ot: action.ot, item: action.item, nro: action.nro }), // data can be `string` or {object}!
+                body: JSON.stringify({ id_rem: action.id_rem }), // data can be `string` or {object}!
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }).then(res => res.json())
                 .then(response => {
-                    store.dispatch(receive_componentes(response.data))
+                    store.dispatch(receive_remision(response.data, response.remision_id))
                 })
-                .catch(error => store.dispatch(error_componentes()));
-            break;
-        case "REQUEST_SAVE_CPTE":
-            fetch('http://192.168.0.21:4000/saveComponente', {
-                method: 'POST',
-                body: JSON.stringify({ id_sub_item: action.id_sub_item, id_componente: action.id_componente, id_usuario: action.id_usuario, requerida: action.requerida, ot: action.ot, item: action.item, nro: action.nro }), // data can be `string` or {object}!
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(res => res.json())
-                .then(response => {
-                    store.dispatch(receive_save_cpte(response.data))
-                })
-                .catch(error => store.dispatch(error_save_cpte()));
+                .catch(error => store.dispatch(error_remision()));
             break;
         default:
             next(action);

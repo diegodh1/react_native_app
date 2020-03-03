@@ -4,6 +4,9 @@ import { requestSeccion } from '../redux/actions/actions';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
+import {
+    PacmanIndicator,
+} from 'react-native-indicators';
 
 class Login extends Component {
     constructor(props) {
@@ -39,6 +42,7 @@ class Login extends Component {
         const { message } = this.props;
 
         return (
+            this.state.cargandoLog ? <View style={styles.loading}><PacmanIndicator color="green" /></View> :
             <View style={styles.container}>
                 <UsuarioInvalido message={message} />
                 <Animatable.View animation="rotate" iterationCount={1} direction="alternate">
@@ -74,9 +78,6 @@ class Login extends Component {
                             onChangeText={(text) => this.setState({ pass: text })} />
                     </View>
                 </Animatable.View>
-                {
-                    this.state.cargandoLog ? <View style={styles.loading}><ActivityIndicator size="large" color="green" animating={true} /></View> : null
-                }
                 <Animatable.View animation="fadeInUp" iterationCount={1} direction="alternate" ref={ref => (this.AnimationRef = ref)}>
                     <View>
                         <TouchableOpacity

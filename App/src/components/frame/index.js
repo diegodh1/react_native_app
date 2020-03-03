@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { requestPaths } from '../../redux/actions/actions';
-import { View, Text, StyleSheet, Image, Dimensions,ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
 import ImageZoom from 'react-native-image-pan-zoom';
 import Pdf from 'react-native-pdf';
+import {
+    PacmanIndicator,
+} from 'react-native-indicators';
+import { Header } from 'react-native-elements';
 
 class Frame extends Component {
     constructor(props) {
@@ -16,25 +20,27 @@ class Frame extends Component {
         this.backHome = this.backHome.bind(this);
     }
     backHome() {
-        this.AnimationRef.rubberBand();
         this.props.navigation.navigate('Lista')
     }
     render() {
-        const { usuario, encoded64, extension , cargando} = this.props;
+        const { usuario, encoded64, extension, cargando } = this.props;
         return (
             <View>
-                <View style={{ flexDirection: 'row' }}>
-                    <Icon name="view-sequential" size={40} onPress={() => this.props.navigation.openDrawer()} />
-                    <Animatable.View ref={ref => (this.AnimationRef = ref)}>
-                        <View style={{ paddingLeft: '80%' }}>
-                            <Icon name="reply" size={40} onPress={() => this.backHome()} />
-                        </View>
-                    </Animatable.View>
-                </View>
                 {
-                    cargando ? <View style={styles.loading}><ActivityIndicator size="large" color="black" animating={true} /></View> : null
+                    cargando ? <View style={styles.loading}><PacmanIndicator color="green" /></View> :
+                        < View >
+                            <Header
+                                containerStyle={{
+                                    backgroundColor: '#6566FF',
+                                    justifyContent: 'space-around'
+                                }}
+                                leftComponent={<Icon color="white" name="view-sequential" size={40} onPress={() => this.props.navigation.openDrawer()} />}
+                                rightComponent={<Icon name="reply" color="white" size={40} onPress={() => this.backHome()} />}
+                            />
+
+                            <FrameItem ext={extension} encoded64={encoded64} />
+                        </View>
                 }
-                <FrameItem ext={extension} encoded64={encoded64} />
             </View>
         );
     }
@@ -82,7 +88,7 @@ const styles = StyleSheet.create({
     },
     container: {
         alignItems: 'center',
-        margin:10,
+        margin: 10,
     },
     pdf: {
         width: '95%',
@@ -92,9 +98,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
+        marginTop:'50%',
         top: 0,
         bottom: 0,
-      }
+    }
 })
 
 const mapStateToProps = (state) => {
