@@ -85,7 +85,7 @@ class Lista extends Component {
                             />
                             <SafeAreaView >
                                 <ScrollView >
-                                    <View>
+                                    <View style={{marginBottom:'70%'}}>
                                         {
                                             paths.map((path) => (
                                                 <TouchableOpacity

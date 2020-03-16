@@ -48,7 +48,12 @@ class Remision extends Component {
         let { components_obs } = this.state;
         for (let i = 0; i < components_obs.length; i++) {
             if (components_obs[i].id === id) {
-                components_obs[i].cantidad = cantidad;
+                if (components_obs[i].cant_aux >= cantidad ) {
+                    components_obs[i].cantidad = cantidad;
+                }
+                else{
+                    alert("La cantidad debe ser un valor menor");
+                }
             }
         }
         this.setState({ components_obs: components_obs });
@@ -194,7 +199,7 @@ class Remision extends Component {
                                                         <Text>LISTA DE COMPONENTES DEL ITEM {this.state.nroIntem}</Text>
                                                         {
                                                             this.state.components_obs.map((l) => (
-                                                                <Card title={"Componente Id: " + l.id} key={l.id}>
+                                                                <Card title={"Componente Id: " + l.id_aux} key={l.id}>
                                                                     <CheckBox
                                                                         center
                                                                         title='Utilizar'
@@ -204,17 +209,19 @@ class Remision extends Component {
                                                                     <Text>
                                                                         {l.descripcion + '\n'}
                                                                     </Text>
-                                                                    <TextInput
-                                                                        placeholder="Ingresar Cantidad"
-                                                                        underlineColorAndroid='transparent'
-                                                                        keyboardType="numeric"
-                                                                        style={{ borderWidth: 0.5, borderRadius: 1 }}
-                                                                        value={l.cantidad}
-                                                                        onChangeText={text => this.onChangeCant(l.id, text)}
-                                                                    />
+                                                                    <View>
+                                                                        <TextInput
+                                                                            placeholder="Ingresar Cantidad"
+                                                                            underlineColorAndroid='transparent'
+                                                                            keyboardType="numeric"
+                                                                            style={{ borderWidth: 0.5, borderRadius: 1 }}
+                                                                            value={l.cantidad}
+                                                                            onChangeText={text => this.onChangeCant(l.id, text)}
+                                                                        />
+                                                                    </View>
                                                                     <TextInput
                                                                         placeholder="Ingresar Observación"
-                                                                        style={{ backgroundColor: '#CEF7C5', borderWidth: 0.5, borderRadius: 1 }}
+                                                                        style={{ backgroundColor: '#F1F4BE', borderWidth: 0.5, borderRadius: 1 }}
                                                                         multiline={true}
                                                                         numberOfLines={4}
                                                                         onChangeText={text => this.onChangeText(l.id, text)}
@@ -246,6 +253,9 @@ const styles = StyleSheet.create({
     titulo: {
         color: 'green',
         fontWeight: 'bold',
+    },
+    view: {
+        flexDirection: 'row',
     },
     container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
     head: { height: 40, backgroundColor: '#f1f8ff' },
